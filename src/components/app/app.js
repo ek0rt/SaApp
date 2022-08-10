@@ -22,12 +22,12 @@ class App extends Component {
         this.maxId = 4;
     }
 
-    // componentDidMount() {
-    //     const storage = JSON.parse(localStorage.getItem('keys'))
-    //     if(storage) {
-    //         this.setState({data: storage});
-    //     }
-    // }
+    componentDidMount() {
+        const storage = JSON.parse(localStorage.getItem('keys'))
+        if(storage) {
+            this.setState({data: storage});
+        }
+    }
 
  
     onDelete = (id) =>  {
