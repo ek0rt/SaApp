@@ -18,8 +18,8 @@ function EmployersListItem(props) {
     return (
         
         <div className={classNames}>
-        <span className="list-group-item-label"  onClick={onToggleProps} data-toggle='rise'>{name}</span>
-        <input type="text" className="list-group-item-input" defaultValue={salary + '$'}/>
+        <span style={{fontSize: 25}} className="list-group-item-label"  onClick={onToggleProps} data-toggle='rise'>{name}</span>
+        <input style={{fontSize: 25}} type="text" className="list-group-item-input" defaultValue={salary + '$'}/>
         <div className='d-flex justify-content-center align-items-center'>
             <button type="button"
                 data-toggle='increase'
