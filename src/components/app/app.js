@@ -12,83 +12,85 @@ class App extends Component {
         super(props)
         this.state = {
             data:  [
-                {name:  'John', salary: 599, increase: false,rise: true, id: 1 },
-                {name:  'Alex', salary: 300, increase: false, rise: false,id: 2 },
-                {name:  'Katya', salary: 1100, increase: false, rise: false,id: 3 },
+                {name:  'John', salary: 199, increase: true,rise: true, id: 1 },
+                {name:  'Alex', salary: 300, increase: true, rise: false, id: 2 },
+                {name:  'Katya', salary: 1100, increase: false, rise: false, id: 3 },
             ],
             term: '',
             filter: 'all',
         }
-        this.maxId = 5;
+        this.maxId = 4;
     }
 
-    componentDidMount() {
-        const storage = JSON.parse(localStorage.getItem('keys'))
-        if(storage) {
-            this.setState({data: storage});
-        }
-    }
+    // componentDidMount() {
+    //     const storage = JSON.parse(localStorage.getItem('keys'))
+    //     if(storage) {
+    //         this.setState({data: storage});
+    //     }
+    // }
 
+ 
     onDelete = (id) =>  {
         this.setState(({data}) => ({
             data: data.filter(item => item.id !== id)
         }), () => localStorage.setItem('keys', JSON.stringify(this.state.data)))
     }
 
+   
+  onToggleProps = (id, props) => {
+    this.setState(({data}) => ({
+        data: data.map(item => {
+            if(item.id === id) {
+                return {...item, [props]: !item[props]}
+            } 
+            return item
+        }) 
+
+    })
+  )}
+
     onAdd = (name, salary) => {
-        let newItem = {
+        const newItem = {
             name,
             salary,
             increase: false,
             rise: false,
-            id: this.maxId++
+            id: this.maxId++,
         }
         this.setState(({data}) => {
-            let newArr = [...data, newItem];
-          return {
-            data: newArr
-          }
+            const newArr = [...data, newItem]
+            return {
+                data: newArr
+            }
         }, () => localStorage.setItem('keys', JSON.stringify(this.state.data)))
     }
-   
-    onToggleProps = (id, props) => {
-     this.setState(({data}) => ({
-      data: data.map(item => {
-        if(item.id === id) {
-            return {
-               ...item, [props]: !item[props]
-            }
-        } 
-        return item
-      })
-     }))
+
+
+    sendTerm = (term) => {
+        this.setState({term})
     }
 
-    searchEmp = (items, term) => {
-        if (term.length === 0) {
-            return items;
-        }
+    filterEmp = (items, term) => {
         return items.filter(item => {
-            return item.name.indexOf(term) > -1;
+           return item.name.indexOf(term) > -1;
         })
-    } 
-
-    onUpdateSearch = (term) => {
-        this.setState({term: term})
     }
 
-    Filter = (items, filter) => {
-        if(filter === 'rise') {
-            return items.filter(item => item.rise)
-        } 
-        if(filter === 'more1000') {
-            return items.filter(item => item.salary > 1000)
-        } return items
+
+    buttonsFilter = (items, filter) => {
+        switch(filter) {
+            case 'rise':
+                return items.filter(item => item.rise)
+            case 'more1000':
+                return items.filter(item => item.salary > 1000)
+            default:
+                return items;
+        }
     }
 
     onFilter = (filter) => {
         this.setState({
-            filter: filter
+            filter
         })
     }
 
@@ -97,22 +99,22 @@ class App extends Component {
         const {data, term, filter} = this.state;
         const employees = this.state.data.length;
         const increased = this.state.data.filter(item => item.increase).length;
-        const visibleData = this.Filter(this.searchEmp(data, term), filter);
+        const visibility =  this.buttonsFilter(this.filterEmp(data, term), filter) 
 
         return (
             <div className="app">
-                <AppInfo employees={employees} increased={increased} ></AppInfo>
+                <AppInfo employees={employees} increased={increased}></AppInfo>
                 <div className="search-panel">
-                    <SearchPanel onUpdateSearch={this.onUpdateSearch}/>
-                    <AppFilter onFilter={this.onFilter} filter={filter}/>
+                    <SearchPanel sendTerm={this.sendTerm}/>
+                    <AppFilter filter={filter} onFilter={this.onFilter}/>
                 </div>
                     <EmployersList 
                         onToggleProps={this.onToggleProps}
                         onDelete={this.onDelete}
-                        data={visibleData}
+                        data={visibility}
                         />
                     <EmployersAddForm 
-                    onAdd={this.onAdd}
+                        onAdd={this.onAdd}
                     />
             </div>
             

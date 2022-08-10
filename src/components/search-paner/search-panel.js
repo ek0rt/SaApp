@@ -3,29 +3,30 @@ import './search-panel.css';
 
 class SearchPanel extends Component {
     constructor(props) {
-        super(props)
+        super(props) 
         this.state = {
             term: '',
         }
     }
 
-    onUpdateSearch = (e) => {
+
+    onValueChange = (e) => {
+        let term = e.target.value 
         this.setState({
-            [e.target.name]: e.target.value,
-        }, () => this.props.onUpdateSearch(this.state.term))
-        
+           term
+        }, () => this.props.sendTerm(term))
     }
 
-   
+
     render() {
         return (
             <input 
             type="text"
             name='term'
+            value={this.state.term}
+            onChange={this.onValueChange}
             className= 'form-control search-input'
             placeholder='Найти сотрудника'
-            value={this.state.term}
-            onChange={this.onUpdateSearch}
             />
         )
     }

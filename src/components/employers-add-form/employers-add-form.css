@@ -16,10 +16,9 @@
     margin-right: 20px;
 }
 
-.form-control.red {
+.add-form input.red {
     border: 3px solid red;
 }
-
 
 
 

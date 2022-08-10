@@ -3,9 +3,10 @@ import './employers-list-item.css';
 
 function EmployersListItem(props) {
 
-    const {name, salary, onDelete, onToggleProps, increase, rise} = props;
+    const {name, salary, onToggleProps, onDelete, increase, rise} = props;
 
     let classNames = 'list-group-item d-flex justify-content-between';
+    
     if(increase) {
         classNames += ' increase';
     }
